@@ -99,10 +99,14 @@ document.addEventListener("keyup", removeKeyPress);
 
 function findKeyPress(evt) {
     textArea.focus();
+    evt.preventDefault()
 
     button.forEach (btn => {
         if (btn.classList[0] === evt.code) {
             btn.classList.add("active");
+            if (btn.innerHTML.split('').length < 2) {
+                textArea.value += btn.innerHTML;
+            }
         }
     })
 
