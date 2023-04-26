@@ -87,8 +87,20 @@ function changeCase(langText, caseVal) {
     data.en.upperCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
-  } else {
+  } else if (langText === 'en' && caseVal === 'upper') {
     data.en.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+}
+// shift
+function changeSymbol(langText) {
+  if (langText === 'ru') {
+    data.ru.shift.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  } else if (langText === 'en') {
+    data.en.shift.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
@@ -101,11 +113,15 @@ function findKeyPress(evt) {
   button.forEach((btn) => {
     if (btn.classList[0] === evt.code) {
       btn.classList.add('active');
-      if (btn.innerHTML.split('').length < 2) {
-        textArea.value += btn.innerHTML;
+      if (btn.innerText.split('').length <= 2) {
+        textArea.value += btn.innerText;
       }
     }
   });
+
+  if (evt.code === 'Space') {
+    textArea.value += ' ';
+  }
 
   if (evt.code === 'CapsLock') {
     if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
@@ -124,6 +140,34 @@ function findKeyPress(evt) {
   if (evt.code === 'AltLeft' && evt.ctrlKey) {
     changeLanuage(language);
   }
+
+  if (evt.code === 'Backspace') {
+    textArea.value = textArea.value.substring(0, textArea.value.length - 1);
+  }
+
+  if (evt.code === 'ShiftLeft') {
+    changeSymbol(language);
+  }
+}
+
+function comeBackLangAndCase(langText, caseVal) {
+  if (langText === 'ru' && caseVal === 'lower') {
+    data.ru.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  } else if (langText === 'ru' && caseVal === 'upper') {
+    data.ru.upperCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  } else if (langText === 'en' && caseVal === 'lower') {
+    data.en.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  } else if (langText === 'en' && caseVal === 'upper') {
+    data.en.upperCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
 }
 
 document.addEventListener('keydown', findKeyPress);
@@ -136,6 +180,10 @@ function removeKeyPress(evt) {
 
     if (btn.classList[0] === 'CapsLock' && textCase === 'upper') {
       btn.classList.remove('active');
+    }
+
+    if (evt.code === 'ShiftLeft') {
+      comeBackLangAndCase(language, textCase);
     }
   });
 }
