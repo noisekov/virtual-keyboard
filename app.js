@@ -123,6 +123,10 @@ function findKeyPress(evt) {
     textArea.value += ' ';
   }
 
+  if (evt.code === 'Enter') {
+    textArea.value += '\n';
+  }
+
   if (evt.code === 'CapsLock') {
     if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
       textCase = 'lower';
@@ -201,3 +205,35 @@ button.forEach((btn) => {
   btn.addEventListener('mousedown', setActiveClass);
   btn.addEventListener('mouseup', removeActiveClass);
 });
+
+function writeLetter(evt) {
+  textArea.focus();
+
+  if (evt.target.closest('.button').innerText.split('').length <= 2) {
+    textArea.value += evt.target.closest('.button').innerText;
+  }
+
+  if (evt.target.closest('.button').innerHTML === ' ') {
+    textArea.value += ' ';
+  }
+
+  if (evt.target.closest('.button').innerHTML === 'Enter') {
+    textArea.value += '\n';
+  }
+
+  if (evt.target.closest('.button').innerText === 'CapsLock') {
+    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
+      textCase = 'lower';
+      changeCase(language, textCase);
+    } else {
+      textCase = 'upper';
+      changeCase(language, textCase);
+    }
+  }
+
+  if (evt.target.closest('.button').innerText === 'Backspace') {
+    textArea.value = textArea.value.substring(0, textArea.value.length - 1);
+  }
+}
+
+keyboard.addEventListener('click', writeLetter);
