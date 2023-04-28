@@ -114,17 +114,18 @@ function findKeyPress(evt) {
     if (btn.classList[0] === evt.code) {
       btn.classList.add('active');
       if (btn.innerText.split('').length <= 2) {
-        textArea.value += btn.innerText;
+        textArea.setRangeText(btn.innerText, textArea.selectionStart, textArea.selectionEnd, 'end');
       }
     }
   });
-
   if (evt.code === 'Space') {
-    textArea.value += ' ';
+    textArea.setRangeText(' ', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
-
   if (evt.code === 'Enter') {
-    textArea.value += '\n';
+    textArea.setRangeText('\n', textArea.selectionStart, textArea.selectionEnd, 'end');
+  }
+  if (evt.code === 'Tab') {
+    textArea.setRangeText('    ', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
   if (evt.code === 'CapsLock') {
@@ -144,9 +145,13 @@ function findKeyPress(evt) {
   if (evt.code === 'AltLeft' && evt.ctrlKey) {
     changeLanuage(language);
   }
-
   if (evt.code === 'Backspace') {
-    textArea.value = textArea.value.substring(0, textArea.value.length - 1);
+    if (textArea.selectionStart > 0) {
+      textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+    }
+  }
+  if (evt.code === 'Delete') {
+    textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
 
   if (evt.code === 'ShiftLeft') {
@@ -208,17 +213,17 @@ button.forEach((btn) => {
 
 function writeLetter(evt) {
   textArea.focus();
-
   if (evt.target.closest('.button').innerText.split('').length <= 2) {
-    textArea.value += evt.target.closest('.button').innerText;
+    textArea.setRangeText(evt.target.closest('.button').innerText, textArea.selectionStart, textArea.selectionEnd, 'end');
   }
-
   if (evt.target.closest('.button').innerHTML === ' ') {
-    textArea.value += ' ';
+    textArea.setRangeText(' ', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
-
   if (evt.target.closest('.button').innerHTML === 'Enter') {
-    textArea.value += '\n';
+    textArea.setRangeText('\n', textArea.selectionStart, textArea.selectionEnd, 'end');
+  }
+  if (evt.target.closest('.button').innerHTML === 'Tab') {
+    textArea.setRangeText('    ', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
   if (evt.target.closest('.button').innerText === 'CapsLock') {
@@ -232,7 +237,12 @@ function writeLetter(evt) {
   }
 
   if (evt.target.closest('.button').innerText === 'Backspace') {
-    textArea.value = textArea.value.substring(0, textArea.value.length - 1);
+    if (textArea.selectionStart > 0) {
+      textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+    }
+  }
+  if (evt.target.closest('.button').innerText === 'Delete') {
+    textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
 }
 
