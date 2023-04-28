@@ -154,7 +154,7 @@ function findKeyPress(evt) {
     textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
 
-  if (evt.code === 'ShiftLeft') {
+  if (evt.key === 'Shift') {
     changeSymbol(language);
   }
 }
@@ -191,7 +191,8 @@ function removeKeyPress(evt) {
       btn.classList.remove('active');
     }
 
-    if (evt.code === 'ShiftLeft') {
+    if (evt.key === 'Shift') {
+      btn.classList.remove('active');
       comeBackLangAndCase(language, textCase);
     }
   });
