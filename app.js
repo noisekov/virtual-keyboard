@@ -162,7 +162,7 @@ function findKeyPress(evt) {
     textArea.setRangeText('\n', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
   if (evt.code === 'Tab') {
-    textArea.setRangeText('    ', textArea.selectionStart, textArea.selectionEnd, 'end');
+    textArea.setRangeText('\t', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
   if (evt.code === 'CapsLock') {
@@ -275,7 +275,7 @@ function setActiveClass(evt) {
     textArea.setRangeText('\n', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
   if (evt.target.closest('.button').innerHTML === 'Tab') {
-    textArea.setRangeText('    ', textArea.selectionStart, textArea.selectionEnd, 'end');
+    textArea.setRangeText('\t', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
   if (evt.target.closest('.button').innerText === 'Backspace') {
@@ -286,11 +286,22 @@ function setActiveClass(evt) {
   if (evt.target.closest('.button').innerText === 'Del') {
     textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
+  if (evt.target.closest('.button').innerText === 'Shift') {
+    if (textCase === 'lower') {
+      changeSymbolShift(language, 'upper');
+    } else {
+      changeSymbolShift(language, 'lower');
+    }
+  }
 }
 
 function removeActiveClass(evt) {
-  if (evt.target.closest('.button').innerText !== 'Caps Lock') {
+  if (evt.target.closest('.button').innerText !== 'Caps Lock' && evt.target.closest('.button').innerText !== 'Shift') {
     evt.target.closest('.button').classList.remove('active');
+  }
+  if (evt.target.closest('.button').innerText === 'Shift') {
+    evt.target.closest('.button').classList.remove('active');
+    comeBackLangAndCase(language, textCase);
   }
 }
 
