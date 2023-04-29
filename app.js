@@ -28,7 +28,6 @@ lang.classList.add('lang');
 lang.innerHTML = 'Change language left combination Ctrl + Alt';
 content.append(lang);
 
-// получаем значения кнопок из JSON
 function dataJSON() {
   const xhr = new XMLHttpRequest();
   const URL = './data.json';
@@ -41,7 +40,6 @@ const data = JSON.parse(dataJSON());
 
 const keyboard = document.querySelector('.keyboard');
 
-// генерим кнопки с классом code
 data.class.code.forEach((btn) => {
   const btnKeyboard = document.createElement('button');
   btnKeyboard.className = `${btn} button`;
@@ -53,19 +51,30 @@ const button = document.querySelectorAll('.button');
 let language = 'ru';
 let textCase = 'lower';
 
-// первоначальный язык на кнопках
 data.ru.lowerCase.forEach((btn, index) => {
   button[index].textContent = `${btn}`;
 });
 
-// изменение языка
-function changeLanuage(langText) {
-  if (langText === 'ru') {
+function changeLanuage(langText, caseVal) {
+  if (langText === 'ru' && caseVal === 'lower') {
     language = 'en';
     data.en.lowerCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
-  } else {
+  }
+  if (langText === 'ru' && caseVal === 'upper') {
+    language = 'en';
+    data.en.upperCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'upper') {
+    language = 'ru';
+    data.ru.upperCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'lower') {
     language = 'ru';
     data.ru.lowerCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
@@ -73,8 +82,7 @@ function changeLanuage(langText) {
   }
 }
 
-// изменение регистра
-function changeCase(langText, caseVal) {
+function changeCaseCaps(langText, caseVal) {
   if (langText === 'ru' && caseVal === 'lower') {
     data.ru.upperCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
@@ -93,8 +101,10 @@ function changeCase(langText, caseVal) {
     });
   }
 }
-// shift
-function changeSymbol(langText) {
+
+let caseWhenClickShift = null;
+function changeSymbol(langText, caseVal) {
+  caseWhenClickShift = caseVal;
   if (langText === 'ru') {
     data.ru.shift.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
@@ -131,19 +141,19 @@ function findKeyPress(evt) {
   if (evt.code === 'CapsLock') {
     if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
       textCase = 'lower';
-      changeCase(language, textCase);
+      changeCaseCaps(language, textCase);
     } else {
       textCase = 'upper';
-      changeCase(language, textCase);
+      changeCaseCaps(language, textCase);
     }
   }
 
   if (evt.code === 'ControlLeft' && evt.altKey) {
-    changeLanuage(language);
+    changeLanuage(language, textCase);
   }
 
   if (evt.code === 'AltLeft' && evt.ctrlKey) {
-    changeLanuage(language);
+    changeLanuage(language, textCase);
   }
   if (evt.code === 'Backspace') {
     if (textArea.selectionStart > 0) {
@@ -155,7 +165,7 @@ function findKeyPress(evt) {
   }
 
   if (evt.key === 'Shift') {
-    changeSymbol(language);
+    changeSymbol(language, textCase);
   }
 }
 
@@ -193,6 +203,7 @@ function removeKeyPress(evt) {
 
     if (evt.key === 'Shift') {
       btn.classList.remove('active');
+      textCase = caseWhenClickShift;
       comeBackLangAndCase(language, textCase);
     }
   });
@@ -214,6 +225,7 @@ button.forEach((btn) => {
 
 function writeLetter(evt) {
   textArea.focus();
+
   if (evt.target.closest('.button').innerText.split('').length <= 2) {
     textArea.setRangeText(evt.target.closest('.button').innerText, textArea.selectionStart, textArea.selectionEnd, 'end');
   }
@@ -227,13 +239,14 @@ function writeLetter(evt) {
     textArea.setRangeText('    ', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
-  if (evt.target.closest('.button').innerText === 'CapsLock') {
+  if (evt.target.closest('.button').innerText === 'Caps Lock') {
     if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
+      evt.target.closest('.button').classList.add('active');
       textCase = 'lower';
-      changeCase(language, textCase);
+      changeCaseCaps(language, textCase);
     } else {
       textCase = 'upper';
-      changeCase(language, textCase);
+      changeCaseCaps(language, textCase);
     }
   }
 
@@ -242,7 +255,7 @@ function writeLetter(evt) {
       textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
     }
   }
-  if (evt.target.closest('.button').innerText === 'Delete') {
+  if (evt.target.closest('.button').innerText === 'Del') {
     textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
 }
