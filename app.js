@@ -230,7 +230,9 @@ function removeKeyPress(evt) {
       } else {
         textCase = 'lower';
       }
-      btn.classList.remove('active');
+      if (btn.innerText === 'Shift') {
+        btn.classList.remove('active');
+      }
       comeBackLangAndCase(language, textCase);
     }
   });
