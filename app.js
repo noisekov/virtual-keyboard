@@ -51,10 +51,18 @@ const button = document.querySelectorAll('.button');
 let language = 'ru';
 let textCase = 'lower';
 let isCapse = false;
-let isShift = false;
 
-data.ru.lowerCase.forEach((btn, index) => {
-  button[index].textContent = `${btn}`;
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('language') === null || localStorage.getItem('language') === 'ru') {
+    data.ru.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  } else {
+    language = localStorage.getItem('language');
+    data.en.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
 });
 
 function changeLanuage(langText, caseVal) {
@@ -82,6 +90,7 @@ function changeLanuage(langText, caseVal) {
       button[index].textContent = `${btn}`;
     });
   }
+  localStorage.setItem('language', `${language}`);
 }
 
 function changeCaseCaps(langText, caseVal) {
@@ -179,7 +188,6 @@ function findKeyPress(evt) {
   }
 
   if (evt.key === 'Shift') {
-    isShift = true;
     if (textCase === 'lower') {
       changeSymbolShift(language, 'upper');
     } else {
@@ -224,7 +232,6 @@ function removeKeyPress(evt) {
     }
 
     if (evt.key === 'Shift') {
-      isShift = false;
       if (textCase === 'lower') {
         textCase = 'upper';
       } else {
