@@ -50,6 +50,9 @@ const button = document.querySelectorAll('.button');
 
 let language = 'ru';
 let textCase = 'lower';
+let languageWas = null;
+let textCaseWas = null;
+let isCapse = false;
 
 data.ru.lowerCase.forEach((btn, index) => {
   button[index].textContent = `${btn}`;
@@ -82,35 +85,37 @@ function changeLanuage(langText, caseVal) {
   }
 }
 
-function changeCaseCaps(langText, caseVal) {
-  if (langText === 'ru' && caseVal === 'lower') {
+function changeCaseCaps(langText) {
+  if (langText === 'ru') {
     data.ru.upperCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
-  } else if (langText === 'ru' && caseVal === 'upper') {
-    data.ru.lowerCase.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  } else if (langText === 'en' && caseVal === 'lower') {
+  }
+  if (langText === 'en') {
     data.en.upperCase.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  } else if (langText === 'en' && caseVal === 'upper') {
-    data.en.lowerCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
 }
 
-let caseWhenClickShift = null;
-function changeSymbol(langText, caseVal) {
-  caseWhenClickShift = caseVal;
-  if (langText === 'ru') {
-    data.ru.shift.forEach((btn, index) => {
+function changeSymbolShift(langText, caseVal) {
+  if (langText === 'ru' && caseVal === 'lower') {
+    data.ru.shiftRuLower.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
-  } else if (langText === 'en') {
-    data.en.shift.forEach((btn, index) => {
+  }
+  if (langText === 'ru' && caseVal === 'upper') {
+    data.ru.shiftRuUpper.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'lower') {
+    data.en.shiftEnLower.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'upper') {
+    data.en.shiftEnUpper.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
@@ -139,22 +144,24 @@ function findKeyPress(evt) {
   }
 
   if (evt.code === 'CapsLock') {
-    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
-      textCase = 'lower';
-      changeCaseCaps(language, textCase);
+    if (isCapse === false) {
+      isCapse = true;
     } else {
-      textCase = 'upper';
-      changeCaseCaps(language, textCase);
+      isCapse = false;
+    }
+    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
+      textCaseWas = 'lower';
+      changeCaseCaps(language);
+    } else {
+      textCaseWas = 'upper';
+      changeCaseCaps(language);
     }
   }
 
-  if (evt.code === 'ControlLeft' && evt.altKey) {
+  if (evt.ctrlKey && evt.altKey) {
     changeLanuage(language, textCase);
   }
 
-  if (evt.code === 'AltLeft' && evt.ctrlKey) {
-    changeLanuage(language, textCase);
-  }
   if (evt.code === 'Backspace') {
     if (textArea.selectionStart > 0) {
       textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
@@ -165,7 +172,7 @@ function findKeyPress(evt) {
   }
 
   if (evt.key === 'Shift') {
-    changeSymbol(language, textCase);
+    changeSymbolShift(language, textCase);
   }
 }
 
@@ -197,13 +204,12 @@ function removeKeyPress(evt) {
       btn.classList.remove('active');
     }
 
-    if (btn.classList[0] === 'CapsLock' && textCase === 'upper') {
+    if (btn.classList[0] === 'CapsLock' && isCapse === false) {
       btn.classList.remove('active');
     }
 
     if (evt.key === 'Shift') {
       btn.classList.remove('active');
-      textCase = caseWhenClickShift;
       comeBackLangAndCase(language, textCase);
     }
   });
@@ -212,19 +218,11 @@ function removeKeyPress(evt) {
 document.addEventListener('keyup', removeKeyPress);
 
 function setActiveClass(evt) {
-  evt.target.closest('.button').classList.add('active');
-}
-
-function removeActiveClass(evt) {
-  evt.target.closest('.button').classList.remove('active');
-}
-button.forEach((btn) => {
-  btn.addEventListener('mousedown', setActiveClass);
-  btn.addEventListener('mouseup', removeActiveClass);
-});
-
-function writeLetter(evt) {
   textArea.focus();
+
+  if (evt.target.closest('.button').innerText !== 'Caps Lock') {
+    evt.target.closest('.button').classList.add('active');
+  }
 
   if (evt.target.closest('.button').innerText.split('').length <= 2) {
     textArea.setRangeText(evt.target.closest('.button').innerText, textArea.selectionStart, textArea.selectionEnd, 'end');
@@ -239,17 +237,6 @@ function writeLetter(evt) {
     textArea.setRangeText('    ', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
-  if (evt.target.closest('.button').innerText === 'Caps Lock') {
-    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
-      evt.target.closest('.button').classList.add('active');
-      textCase = 'lower';
-      changeCaseCaps(language, textCase);
-    } else {
-      textCase = 'upper';
-      changeCaseCaps(language, textCase);
-    }
-  }
-
   if (evt.target.closest('.button').innerText === 'Backspace') {
     if (textArea.selectionStart > 0) {
       textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
@@ -260,4 +247,33 @@ function writeLetter(evt) {
   }
 }
 
-keyboard.addEventListener('click', writeLetter);
+function removeActiveClass(evt) {
+  if (evt.target.closest('.button').innerText !== 'Caps Lock') {
+    evt.target.closest('.button').classList.remove('active');
+  }
+}
+button.forEach((btn) => {
+  btn.addEventListener('mousedown', setActiveClass);
+  btn.addEventListener('mouseup', removeActiveClass);
+});
+
+function capsClick(evt) {
+  if (evt.target.closest('.button').innerText === 'Caps Lock') {
+    if (isCapse === false) {
+      isCapse = true;
+      evt.target.closest('.button').classList.add('active');
+    } else {
+      isCapse = false;
+      evt.target.closest('.button').classList.remove('active');
+    }
+    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
+      textCaseWas = 'lower';
+      changeCaseCaps(language);
+    } else {
+      textCaseWas = 'upper';
+      changeCaseCaps(language);
+    }
+  }
+}
+
+keyboard.addEventListener('click', capsClick);
