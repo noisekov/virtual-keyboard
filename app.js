@@ -232,6 +232,17 @@ function setActiveClass(evt) {
     evt.target.closest('.button').classList.add('active');
   }
 
+  if (evt.target.closest('.button').innerText === 'Caps Lock') {
+    if (isCapse === false) {
+      isCapse = true;
+      evt.target.closest('.button').classList.add('active');
+    } else {
+      isCapse = false;
+      evt.target.closest('.button').classList.remove('active');
+    }
+    changeCaseCaps(language, textCase);
+  }
+
   if (evt.target.closest('.button').innerText.split('').length <= 2) {
     textArea.setRangeText(evt.target.closest('.button').innerText, textArea.selectionStart, textArea.selectionEnd, 'end');
   }
@@ -266,24 +277,3 @@ button.forEach((btn) => {
   btn.addEventListener('mouseup', removeActiveClass);
   btn.addEventListener('mouseleave', removeActiveClass);
 });
-
-// function capsClick(evt) {
-//   if (evt.target.closest('.button').innerText === 'Caps Lock') {
-//     if (isCapse === false) {
-//       isCapse = true;
-//       evt.target.closest('.button').classList.add('active');
-//     } else {
-//       isCapse = false;
-//       evt.target.closest('.button').classList.remove('active');
-//     }
-//     if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
-//       textCaseWas = 'lower';
-//       changeCaseCaps(language);
-//     } else {
-//       textCaseWas = 'upper';
-//       changeCaseCaps(language);
-//     }
-//   }
-// }
-
-// keyboard.addEventListener('click', capsClick);
