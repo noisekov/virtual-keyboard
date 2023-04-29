@@ -50,8 +50,8 @@ const button = document.querySelectorAll('.button');
 
 let language = 'ru';
 let textCase = 'lower';
-let languageWas = null;
-let textCaseWas = null;
+// let languageWas = null;
+// let textCaseWas = null;
 let isCapse = false;
 
 data.ru.lowerCase.forEach((btn, index) => {
@@ -85,41 +85,55 @@ function changeLanuage(langText, caseVal) {
   }
 }
 
-function changeCaseCaps(langText) {
-  if (langText === 'ru') {
+function changeCaseCaps(langText, caseVal) {
+  if (langText === 'ru' && caseVal === 'lower') {
+    textCase = 'upper';
     data.ru.upperCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
-  if (langText === 'en') {
+  if (langText === 'ru' && caseVal === 'upper') {
+    textCase = 'lower';
+    data.ru.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'lower') {
+    textCase = 'upper';
     data.en.upperCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'upper') {
+    textCase = 'lower';
+    data.en.lowerCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
 }
 
-function changeSymbolShift(langText, caseVal) {
-  if (langText === 'ru' && caseVal === 'lower') {
-    data.ru.shiftRuLower.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  }
-  if (langText === 'ru' && caseVal === 'upper') {
-    data.ru.shiftRuUpper.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  }
-  if (langText === 'en' && caseVal === 'lower') {
-    data.en.shiftEnLower.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  }
-  if (langText === 'en' && caseVal === 'upper') {
-    data.en.shiftEnUpper.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  }
-}
+// function changeSymbolShift(langText, caseVal) {
+//   if (langText === 'ru' && caseVal === 'lower') {
+//     data.ru.shiftRuLower.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   }
+//   if (langText === 'ru' && caseVal === 'upper') {
+//     data.ru.shiftRuUpper.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   }
+//   if (langText === 'en' && caseVal === 'lower') {
+//     data.en.shiftEnLower.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   }
+//   if (langText === 'en' && caseVal === 'upper') {
+//     data.en.shiftEnUpper.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   }
+// }
 
 function findKeyPress(evt) {
   textArea.focus();
@@ -149,13 +163,7 @@ function findKeyPress(evt) {
     } else {
       isCapse = false;
     }
-    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
-      textCaseWas = 'lower';
-      changeCaseCaps(language);
-    } else {
-      textCaseWas = 'upper';
-      changeCaseCaps(language);
-    }
+    changeCaseCaps(language, textCase);
   }
 
   if (evt.ctrlKey && evt.altKey) {
@@ -171,30 +179,30 @@ function findKeyPress(evt) {
     textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
 
-  if (evt.key === 'Shift') {
-    changeSymbolShift(language, textCase);
-  }
+  // if (evt.key === 'Shift') {
+  //   changeSymbolShift(language, textCase);
+  // }
 }
 
-function comeBackLangAndCase(langText, caseVal) {
-  if (langText === 'ru' && caseVal === 'lower') {
-    data.ru.lowerCase.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  } else if (langText === 'ru' && caseVal === 'upper') {
-    data.ru.upperCase.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  } else if (langText === 'en' && caseVal === 'lower') {
-    data.en.lowerCase.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  } else if (langText === 'en' && caseVal === 'upper') {
-    data.en.upperCase.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  }
-}
+// function comeBackLangAndCase(langText, caseVal) {
+//   if (langText === 'ru' && caseVal === 'lower') {
+//     data.ru.lowerCase.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   } else if (langText === 'ru' && caseVal === 'upper') {
+//     data.ru.upperCase.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   } else if (langText === 'en' && caseVal === 'lower') {
+//     data.en.lowerCase.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   } else if (langText === 'en' && caseVal === 'upper') {
+//     data.en.upperCase.forEach((btn, index) => {
+//       button[index].textContent = `${btn}`;
+//     });
+//   }
+// }
 
 document.addEventListener('keydown', findKeyPress);
 
@@ -208,10 +216,10 @@ function removeKeyPress(evt) {
       btn.classList.remove('active');
     }
 
-    if (evt.key === 'Shift') {
-      btn.classList.remove('active');
-      comeBackLangAndCase(language, textCase);
-    }
+    // if (evt.key === 'Shift') {
+    //   btn.classList.remove('active');
+    //   comeBackLangAndCase(language, textCaseWas);
+    // }
   });
 }
 
@@ -252,28 +260,30 @@ function removeActiveClass(evt) {
     evt.target.closest('.button').classList.remove('active');
   }
 }
+
 button.forEach((btn) => {
   btn.addEventListener('mousedown', setActiveClass);
   btn.addEventListener('mouseup', removeActiveClass);
+  btn.addEventListener('mouseleave', removeActiveClass);
 });
 
-function capsClick(evt) {
-  if (evt.target.closest('.button').innerText === 'Caps Lock') {
-    if (isCapse === false) {
-      isCapse = true;
-      evt.target.closest('.button').classList.add('active');
-    } else {
-      isCapse = false;
-      evt.target.closest('.button').classList.remove('active');
-    }
-    if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
-      textCaseWas = 'lower';
-      changeCaseCaps(language);
-    } else {
-      textCaseWas = 'upper';
-      changeCaseCaps(language);
-    }
-  }
-}
+// function capsClick(evt) {
+//   if (evt.target.closest('.button').innerText === 'Caps Lock') {
+//     if (isCapse === false) {
+//       isCapse = true;
+//       evt.target.closest('.button').classList.add('active');
+//     } else {
+//       isCapse = false;
+//       evt.target.closest('.button').classList.remove('active');
+//     }
+//     if (button[20].innerHTML === button[20].innerHTML.toLowerCase()) {
+//       textCaseWas = 'lower';
+//       changeCaseCaps(language);
+//     } else {
+//       textCaseWas = 'upper';
+//       changeCaseCaps(language);
+//     }
+//   }
+// }
 
-keyboard.addEventListener('click', capsClick);
+// keyboard.addEventListener('click', capsClick);
