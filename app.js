@@ -152,17 +152,21 @@ function findKeyPress(evt) {
       btn.classList.add('active');
       if (btn.innerText.split('').length <= 2) {
         textArea.setRangeText(btn.innerText, textArea.selectionStart, textArea.selectionEnd, 'end');
+        textArea.focus();
       }
     }
   });
   if (evt.code === 'Space') {
     textArea.setRangeText(' ', textArea.selectionStart, textArea.selectionEnd, 'end');
+    textArea.focus();
   }
   if (evt.code === 'Enter') {
     textArea.setRangeText('\n', textArea.selectionStart, textArea.selectionEnd, 'end');
+    textArea.focus();
   }
   if (evt.code === 'Tab') {
     textArea.setRangeText('\t', textArea.selectionStart, textArea.selectionEnd, 'end');
+    textArea.focus();
   }
 
   if (evt.code === 'CapsLock') {
@@ -181,10 +185,12 @@ function findKeyPress(evt) {
   if (evt.code === 'Backspace') {
     if (textArea.selectionStart > 0) {
       textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      textArea.focus();
     }
   }
   if (evt.code === 'Delete') {
     textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    textArea.focus();
   }
 
   if (evt.key === 'Shift') {
