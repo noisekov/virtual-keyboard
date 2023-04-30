@@ -51,6 +51,7 @@ const button = document.querySelectorAll('.button');
 let language = 'ru';
 let textCase = 'lower';
 let isCapse = false;
+let isShift = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('language') === null || localStorage.getItem('language') === 'ru') {
@@ -65,28 +66,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function changeLanuage(langText, caseVal) {
-  if (langText === 'ru' && caseVal === 'lower') {
+function changeLanuage(langText, caseVal, shift) {
+  if (langText === 'ru' && caseVal === 'lower' && shift === false) {
     language = 'en';
     data.en.lowerCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
-  if (langText === 'ru' && caseVal === 'upper') {
+  if (langText === 'ru' && caseVal === 'upper' && shift === false) {
     language = 'en';
     data.en.upperCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
-  if (langText === 'en' && caseVal === 'upper') {
+  if (langText === 'en' && caseVal === 'upper' && shift === false) {
     language = 'ru';
     data.ru.upperCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
-  if (langText === 'en' && caseVal === 'lower') {
+  if (langText === 'en' && caseVal === 'lower' && shift === false) {
     language = 'ru';
     data.ru.lowerCase.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'ru' && caseVal === 'lower' && shift === true) {
+    language = 'en';
+    data.en.shiftEnLower.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'ru' && caseVal === 'upper' && shift === true) {
+    language = 'en';
+    data.en.shiftEnUpper.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'lower' && shift === true) {
+    language = 'ru';
+    data.ru.shiftRuLower.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
+  if (langText === 'en' && caseVal === 'upper' && shift === true) {
+    language = 'ru';
+    data.ru.shiftRuUpper.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
@@ -179,7 +204,7 @@ function findKeyPress(evt) {
   }
 
   if (evt.ctrlKey && evt.altKey) {
-    changeLanuage(language, textCase);
+    changeLanuage(language, textCase, isShift);
   }
 
   if (evt.code === 'Backspace') {
@@ -194,6 +219,7 @@ function findKeyPress(evt) {
   }
 
   if (evt.key === 'Shift') {
+    isShift = true;
     if (textCase === 'lower') {
       changeSymbolShift(language, 'upper');
     } else {
@@ -238,6 +264,7 @@ function removeKeyPress(evt) {
     }
 
     if (evt.key === 'Shift') {
+      isShift = false;
       if (textCase === 'lower') {
         textCase = 'upper';
       } else {
@@ -293,6 +320,7 @@ function setActiveClass(evt) {
     textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
   }
   if (evt.target.closest('.button').innerText === 'Shift') {
+    isShift = true;
     if (textCase === 'lower') {
       changeSymbolShift(language, 'upper');
     } else {
@@ -306,6 +334,7 @@ function removeActiveClass(evt) {
     evt.target.closest('.button').classList.remove('active');
   }
   if (evt.target.closest('.button').innerText === 'Shift') {
+    isShift = false;
     evt.target.closest('.button').classList.remove('active');
     comeBackLangAndCase(language, textCase);
   }
