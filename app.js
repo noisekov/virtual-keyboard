@@ -141,22 +141,22 @@ function changeCaseCaps(langText, caseVal) {
 
 function changeSymbolShift(langText, caseVal) {
   if (langText === 'ru' && caseVal === 'lower') {
-    data.ru.shiftRuUpper.forEach((btn, index) => {
-      button[index].textContent = `${btn}`;
-    });
-  }
-  if (langText === 'ru' && caseVal === 'upper') {
     data.ru.shiftRuLower.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
+  if (langText === 'ru' && caseVal === 'upper') {
+    data.ru.shiftRuUpper.forEach((btn, index) => {
+      button[index].textContent = `${btn}`;
+    });
+  }
   if (langText === 'en' && caseVal === 'lower') {
-    data.en.shiftEnUpper.forEach((btn, index) => {
+    data.en.shiftEnLower.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
   if (langText === 'en' && caseVal === 'upper') {
-    data.en.shiftEnLower.forEach((btn, index) => {
+    data.en.shiftEnUpper.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
     });
   }
@@ -215,9 +215,11 @@ function findKeyPress(evt) {
   if (evt.key === 'Shift') {
     isShift = true;
     if (textCase === 'lower') {
-      changeSymbolShift(language, 'upper');
+      textCase = 'upper';
+      changeSymbolShift(language, textCase);
     } else {
-      changeSymbolShift(language, 'lower');
+      textCase = 'lower';
+      changeSymbolShift(language, textCase);
     }
   }
 }
@@ -257,17 +259,18 @@ function removeKeyPress(evt) {
       btn.classList.remove('active');
     }
 
-    if (evt.key === 'Shift') {
+    if (evt.key === 'Shift' && isShift) {
       isShift = false;
       if (textCase === 'lower') {
         textCase = 'upper';
+        comeBackLangAndCase(language, textCase);
       } else {
         textCase = 'lower';
+        comeBackLangAndCase(language, textCase);
       }
       if (btn.innerText === 'Shift') {
         btn.classList.remove('active');
       }
-      comeBackLangAndCase(language, textCase);
     }
   });
 }
@@ -316,9 +319,11 @@ function setActiveClass(evt) {
   if (evt.target.closest('.button').innerText === 'Shift') {
     isShift = true;
     if (textCase === 'lower') {
-      changeSymbolShift(language, 'upper');
+      textCase = 'upper';
+      changeSymbolShift(language, textCase);
     } else {
-      changeSymbolShift(language, 'lower');
+      textCase = 'lower';
+      changeSymbolShift(language, textCase);
     }
   }
 }
@@ -327,10 +332,16 @@ function removeActiveClass(evt) {
   if (evt.target.closest('.button').innerText !== 'Caps Lock' && evt.target.closest('.button').innerText !== 'Shift') {
     evt.target.closest('.button').classList.remove('active');
   }
-  if (evt.target.closest('.button').innerText === 'Shift') {
+  if (evt.target.closest('.button').innerText === 'Shift' && isShift) {
     isShift = false;
+    if (textCase === 'lower') {
+      textCase = 'upper';
+      comeBackLangAndCase(language, textCase);
+    } else {
+      textCase = 'lower';
+      comeBackLangAndCase(language, textCase);
+    }
     evt.target.closest('.button').classList.remove('active');
-    comeBackLangAndCase(language, textCase);
   }
 }
 
