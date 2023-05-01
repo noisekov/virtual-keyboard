@@ -1,3 +1,7 @@
+import dataJSON from './module/get-data.js';
+
+const data = JSON.parse(dataJSON());
+
 const body = document.querySelector('body');
 const div = document.createElement('div');
 div.classList.add('content');
@@ -20,23 +24,13 @@ content.append(keyboardWrapper);
 
 const description = document.createElement('p');
 description.classList.add('description');
-description.innerHTML = 'The keyboard has been created in Windows';
+description.innerHTML = 'The keyboard was created in Windows';
 content.append(description);
 
 const lang = document.createElement('p');
 lang.classList.add('lang');
 lang.innerHTML = 'Change language left combination Ctrl + Alt';
 content.append(lang);
-
-function dataJSON() {
-  const xhr = new XMLHttpRequest();
-  const URL = './data.json';
-  xhr.open('GET', URL, false);
-  xhr.send();
-  return xhr.response;
-}
-
-const data = JSON.parse(dataJSON());
 
 const keyboard = document.querySelector('.keyboard');
 
