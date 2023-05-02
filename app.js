@@ -213,12 +213,16 @@ function findKeyPress(evt) {
   }
 
   if (evt.code === 'CapsLock') {
+    if (evt.repeat) {
+      return false;
+    }
     if (isCapse === false) {
       isCapse = true;
+      changeCaseCaps(language, textCase, isShift);
     } else {
       isCapse = false;
+      changeCaseCaps(language, textCase, isShift);
     }
-    changeCaseCaps(language, textCase, isShift);
   }
 
   if (evt.ctrlKey && evt.altKey) {
