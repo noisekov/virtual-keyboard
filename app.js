@@ -231,12 +231,21 @@ function findKeyPress(evt) {
 
   if (evt.code === 'Backspace') {
     if (textArea.selectionStart > 0) {
-      textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      if (textArea.selectionStart === textArea.selectionEnd) {
+        textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      } else {
+        textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+      }
       textArea.focus();
     }
   }
+  
   if (evt.code === 'Delete') {
-    textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    if (textArea.selectionStart === textArea.selectionEnd) {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    } else {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+    }
     textArea.focus();
   }
 
@@ -336,13 +345,21 @@ function setActiveClass(evt) {
     textArea.setRangeText('\t', textArea.selectionStart, textArea.selectionEnd, 'end');
   }
 
-  if (evt.target.closest('.button').innerText === 'Backspace') {
+   if (evt.target.closest('.button').innerText === 'Backspace') {
     if (textArea.selectionStart > 0) {
-      textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      if (textArea.selectionStart === textArea.selectionEnd) {
+        textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      } else {
+        textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+      }
     }
   }
   if (evt.target.closest('.button').innerText === 'Del') {
-    textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    if (textArea.selectionStart === textArea.selectionEnd) {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    } else {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+    }
   }
   if (evt.target.closest('.button').innerText === 'Shift') {
     isShift = true;
