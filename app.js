@@ -236,7 +236,7 @@ function findKeyPress(evt) {
     textArea.focus();
   }
 
-  if (evt.key === 'Shift') {
+  if (evt.key === 'Shift' && isShift === false) {
     isShift = true;
     if (textCase === 'lower') {
       textCase = 'upper';
