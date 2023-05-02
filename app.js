@@ -362,7 +362,7 @@ function setActiveClass(evt) {
       textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
     }
   }
-  if (evt.target.closest('.button').innerText === 'Shift') {
+  if (evt.target.closest('.button').innerText === 'Shift' && isShift === false) {
     isShift = true;
     if (textCase === 'lower') {
       textCase = 'upper';
