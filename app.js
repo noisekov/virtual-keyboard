@@ -213,12 +213,15 @@ function findKeyPress(evt) {
   }
 
   if (evt.code === 'CapsLock') {
-    if (isCapse === false) {
-      isCapse = true;
-    } else {
-      isCapse = false;
+    if (!evt.repeat) {
+      if (isCapse === false) {
+        isCapse = true;
+        changeCaseCaps(language, textCase, isShift);
+      } else {
+        isCapse = false;
+        changeCaseCaps(language, textCase, isShift);
+      }
     }
-    changeCaseCaps(language, textCase, isShift);
   }
 
   if (evt.ctrlKey && evt.altKey) {
@@ -227,16 +230,25 @@ function findKeyPress(evt) {
 
   if (evt.code === 'Backspace') {
     if (textArea.selectionStart > 0) {
-      textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      if (textArea.selectionStart === textArea.selectionEnd) {
+        textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      } else {
+        textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+      }
       textArea.focus();
     }
   }
+
   if (evt.code === 'Delete') {
-    textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    if (textArea.selectionStart === textArea.selectionEnd) {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    } else {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+    }
     textArea.focus();
   }
 
-  if (evt.key === 'Shift') {
+  if (evt.key === 'Shift' && isShift === false) {
     isShift = true;
     if (textCase === 'lower') {
       textCase = 'upper';
@@ -334,13 +346,22 @@ function setActiveClass(evt) {
 
   if (evt.target.closest('.button').innerText === 'Backspace') {
     if (textArea.selectionStart > 0) {
-      textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      if (textArea.selectionStart === textArea.selectionEnd) {
+        textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, 'end');
+      } else {
+        textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+      }
     }
   }
+
   if (evt.target.closest('.button').innerText === 'Del') {
-    textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    if (textArea.selectionStart === textArea.selectionEnd) {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, 'end');
+    } else {
+      textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd, 'end');
+    }
   }
-  if (evt.target.closest('.button').innerText === 'Shift') {
+  if (evt.target.closest('.button').innerText === 'Shift' && isShift === false) {
     isShift = true;
     if (textCase === 'lower') {
       textCase = 'upper';
