@@ -2,35 +2,25 @@ import dataJSON from './module/get-data.js';
 
 const data = JSON.parse(dataJSON());
 
+const createComponent = (create, className, text) => {
+  const node = document.createElement(create);
+  node.classList.add(className);
+  node.textContent = text;
+  return node;
+};
+
 const body = document.querySelector('body');
-const div = document.createElement('div');
-div.classList.add('content');
-body.append(div);
+body.append(createComponent('div', 'content'));
+
 const content = document.querySelector('.content');
+content.append(createComponent('p', 'title', 'Virtual keyboard'));
 
-const title = document.createElement('p');
-title.classList.add('title');
-title.textContent = 'Virtual keyboard';
-content.append(title);
-
-const textAreaCreate = document.createElement('textarea');
-textAreaCreate.classList.add('textarea');
-content.append(textAreaCreate);
+content.append(createComponent('textarea', 'textarea'));
 const textArea = document.querySelector('.textarea');
 
-const keyboardWrapper = document.createElement('div');
-keyboardWrapper.classList.add('keyboard');
-content.append(keyboardWrapper);
-
-const description = document.createElement('p');
-description.classList.add('description');
-description.innerHTML = 'The keyboard was created in Windows';
-content.append(description);
-
-const lang = document.createElement('p');
-lang.classList.add('lang');
-lang.innerHTML = 'Change language left combination Ctrl + Alt';
-content.append(lang);
+content.append(createComponent('div', 'keyboard'));
+content.append(createComponent('p', 'description', 'The keyboard was created in Windows'));
+content.append(createComponent('p', 'lang', 'Change language left combination Ctrl + Alt'));
 
 const keyboard = document.querySelector('.keyboard');
 
@@ -60,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function changeLanuage(langText, caseVal, shift) {
+const changeLanuage = (langText, caseVal, shift) => {
   if (langText === 'ru' && caseVal === 'lower' && shift === false) {
     language = 'en';
     data.en.lowerCase.forEach((btn, index) => {
@@ -110,9 +100,9 @@ function changeLanuage(langText, caseVal, shift) {
     });
   }
   localStorage.setItem('language', `${language}`);
-}
+};
 
-function changeCaseCaps(langText, caseVal, shift) {
+const changeCaseCaps = (langText, caseVal, shift) => {
   if (langText === 'ru' && caseVal === 'lower' && shift === false) {
     textCase = 'upper';
     data.ru.upperCase.forEach((btn, index) => {
@@ -161,9 +151,9 @@ function changeCaseCaps(langText, caseVal, shift) {
       button[index].textContent = `${btn}`;
     });
   }
-}
+};
 
-function changeSymbolShift(langText, caseVal) {
+const changeSymbolShift = (langText, caseVal) => {
   if (langText === 'ru' && caseVal === 'lower') {
     data.ru.shiftRuLower.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
@@ -184,9 +174,9 @@ function changeSymbolShift(langText, caseVal) {
       button[index].textContent = `${btn}`;
     });
   }
-}
+};
 
-function findKeyPress(evt) {
+const findKeyPress = (evt) => {
   textArea.focus();
   evt.preventDefault();
 
@@ -258,9 +248,9 @@ function findKeyPress(evt) {
       changeSymbolShift(language, textCase);
     }
   }
-}
+};
 
-function comeBackLangAndCase(langText, caseVal) {
+const comeBackLangAndCase = (langText, caseVal) => {
   if (langText === 'ru' && caseVal === 'lower') {
     data.ru.lowerCase.forEach((btn, index) => {
       button[index].textContent = `${btn}`;
@@ -281,11 +271,11 @@ function comeBackLangAndCase(langText, caseVal) {
       button[index].textContent = `${btn}`;
     });
   }
-}
+};
 
 document.addEventListener('keydown', findKeyPress);
 
-function removeKeyPress(evt) {
+const removeKeyPress = (evt) => {
   button.forEach((btn) => {
     if (btn.classList[0] === evt.code && btn.classList[0] !== 'CapsLock') {
       btn.classList.remove('active');
@@ -309,11 +299,11 @@ function removeKeyPress(evt) {
       }
     }
   });
-}
+};
 
 document.addEventListener('keyup', removeKeyPress);
 
-function setActiveClass(evt) {
+const setActiveClass = (evt) => {
   textArea.focus();
 
   if (evt.target.closest('.button').innerText !== 'Caps Lock') {
@@ -371,9 +361,9 @@ function setActiveClass(evt) {
       changeSymbolShift(language, textCase);
     }
   }
-}
+};
 
-function removeActiveClass(evt) {
+const removeActiveClass = (evt) => {
   if (evt.target.closest('.button').innerText !== 'Caps Lock' && evt.target.closest('.button').innerText !== 'Shift') {
     evt.target.closest('.button').classList.remove('active');
   }
@@ -388,7 +378,7 @@ function removeActiveClass(evt) {
     }
     evt.target.closest('.button').classList.remove('active');
   }
-}
+};
 
 button.forEach((btn) => {
   btn.addEventListener('mousedown', setActiveClass);
